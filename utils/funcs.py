@@ -64,5 +64,28 @@ def format_datetime(date_operation: str) -> str:
     return output_date
 
 
-def format_operation(operation_data):
-    pass
+def format_operation(operation: dict) -> str:
+    """
+    Функция форматирует данные об операции в удобный для пользователя формат.
+    Если формат словаря не соответствует шаблону, возвращает строку "Некорректные данные об операции"
+    :param operation: словарь с данными об операции
+    :return: строка с данными об операции в нужном формате
+    """
+    # Если это перевод
+    if operation.get('from') and operation.get('to'):
+        output_format = f"{format_datetime(operation['date'])} {operation['description']}\n" \
+                        f"{format_requisites(operation['from'])} -> {format_requisites(operation['to'])}\n" \
+                        f"{operation['operationAmount']['amount']} {operation['operationAmount']['currency']['name']}"
+
+    # Если это открытие вклада
+    if not operation.get('from') and operation.get('to'):
+        output_format = f"{format_datetime(operation['date'])} {operation['description']}\n" \
+                        f"{format_requisites(operation['to'])}\n" \
+                        f"{operation['operationAmount']['amount']} {operation['operationAmount']['currency']['name']}"
+
+    else:
+        output_format = 'Некорректные данные об операции'
+
+    return output_format
+
+
