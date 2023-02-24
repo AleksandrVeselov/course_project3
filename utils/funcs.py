@@ -15,8 +15,8 @@ def load_json(path: str) -> list[dict]:
         counter = -1  # индекс последней в списке операции
 
         while len(filtered_data) != 5:
-            if data['counter'].get('state') == 'EXECUTED':
-                filtered_data.append(data['counter'])  # добавление операции в список
+            if data[counter].get('state') == 'EXECUTED':
+                filtered_data.append(data[counter])  # добавление операции в список
             counter -= 1  # уменьшение индекса на 1
 
     return filtered_data
@@ -78,7 +78,7 @@ def format_operation(operation: dict) -> str:
                         f"{operation['operationAmount']['amount']} {operation['operationAmount']['currency']['name']}"
 
     # Если это открытие вклада
-    if not operation.get('from') and operation.get('to'):
+    elif operation.get('to') and not operation.get('from'):
         output_format = f"{format_datetime(operation['date'])} {operation['description']}\n" \
                         f"{format_requisites(operation['to'])}\n" \
                         f"{operation['operationAmount']['amount']} {operation['operationAmount']['currency']['name']}"
