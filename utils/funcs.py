@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 
 def load_json(path: str) -> list[dict]:
@@ -47,8 +48,20 @@ def format_requisites(requisites: str) -> str:
     return ' '.join(requisites)
 
 
-def format_datetime(date_operation):
-    pass
+def format_datetime(date_operation: str) -> str:
+    """
+    Функция конвертирует дату операции вида "2019-08-26T10:50:58.294041" в удобный для пользователя формат.
+    :param date_operation: строка с датой из файла json
+    :return: строка с датой в формате удобном для чтения пользователем
+    """
+    input_pattern = '%Y-%m-%dT%H:%M:%S'  # шаблон для входной даты
+    output_pattern = '%d.%m.%Y'  # шаблон даты на выходе
+
+    date_operation = date_operation.split('.')  # отсекаем все цифры после точки
+    input_date = datetime.strptime(date_operation[0], input_pattern)  # конвертация строки с датой в формат datetime
+    output_date = input_date.strftime(output_pattern)  # конвертация из формата datetime в строку нужного формата
+
+    return output_date
 
 
 def format_operation(operation_data):
