@@ -4,22 +4,28 @@ from datetime import datetime
 
 def load_json(path: str) -> list[dict]:
     """
-    Открывает json файл с данными об операциях, возвращает
-    список с данными о пяти выполненных операциях
+    Открывает json файл с данными об операциях, сортирует его по дате и возвращает
+    список с данными о пяти последних выполненных операциях
     :param path: путь к файлу с данными об операциях
     :return: список с данными о последних пяти выполненных операциях
     """
     with open(path, 'r', encoding='UTF-8') as json_file:
-        data = json.load(json_file)  # список с данными из .json файла
-        filtered_data = []  # отфильтрованные данные
-        counter = -1  # индекс последней в списке операции
+        operations = json.load(json_file)  # список с данными из .json файла
+        filtered_operations = []  # отфильтрованные данные
 
-        while len(filtered_data) != 5:
-            if data[counter].get('state') == 'EXECUTED':
-                filtered_data.append(data[counter])  # добавление операции в список
-            counter -= 1  # уменьшение индекса на 1
+        for operation in operations:
+            if operation.get('state') == 'EXECUTED':  # отбор выполненных(EXECUTED) операций
+                if operation.get('date'):  # отбор операций у которых есть ключ date
+                    operation['date'] = convert_date(operation['date'])  # конвертация даты в формат datetime
+                    filtered_operations.append(operation)  # добавление операции в список
+            filtered_operations.sort(key=lambda x: x['date'], reverse=True)  # сортировка операций в списке по дате
+    return filtered_operations[:5]  # возвращение пяти последних операций
 
-    return filtered_data
+
+def convert_date(date):
+    input_pattern = '%Y-%m-%dT%H:%M:%S'  # шаблон для входной даты
+    date = date.split('.')
+    return datetime.strptime(date[0], input_pattern)
 
 
 def format_requisites(requisites: str) -> str:
@@ -48,18 +54,14 @@ def format_requisites(requisites: str) -> str:
     return ' '.join(requisites)
 
 
-def format_datetime(date_operation: str) -> str:
+def format_datetime(date_operation: datetime) -> str:
     """
-    Функция конвертирует дату операции вида "2019-08-26T10:50:58.294041" в удобный для пользователя формат.
+    Функция конвертирует дату операции в удобный для пользователя формат.
     :param date_operation: строка с датой из файла json
     :return: строка с датой в формате удобном для чтения пользователем
     """
-    input_pattern = '%Y-%m-%dT%H:%M:%S'  # шаблон для входной даты
     output_pattern = '%d.%m.%Y'  # шаблон даты на выходе
-
-    date_operation = date_operation.split('.')  # отсекаем все цифры после точки
-    input_date = datetime.strptime(date_operation[0], input_pattern)  # конвертация строки с датой в формат datetime
-    output_date = input_date.strftime(output_pattern)  # конвертация из формата datetime в строку нужного формата
+    output_date = date_operation.strftime(output_pattern)  # конвертация из формата datetime в строку нужного формата
 
     return output_date
 
