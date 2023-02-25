@@ -22,9 +22,9 @@ def load_json(path: str) -> list[dict]:
     return filtered_operations[:5]  # возвращение пяти последних операций
 
 
-def convert_date(date):
+def convert_date(date: str) -> datetime:
     input_pattern = '%Y-%m-%dT%H:%M:%S'  # шаблон для входной даты
-    date = date.split('.')
+    date = date.split('.')  # отделение цифр после точки
     return datetime.strptime(date[0], input_pattern)
 
 
