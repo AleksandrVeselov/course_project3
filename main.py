@@ -1,14 +1,28 @@
 from utils import funcs
 
-OPERATIONS = 'operations.json'  # Адрес файла с банковскими операциями
+OPERATIONS_PATH = 'operations.json'  # Адрес файла с банковскими операциями
+COUNT_OPERATIONS = 5  # количество операций
 
 
 def main():
-    last_operations = funcs.load_json(OPERATIONS)  # получение списка с данными о пяти последних проведенных операциях
+    data = funcs.load_json(OPERATIONS_PATH)
+    if isinstance(data, str):
+        print(data)
+        exit()
 
-    for operation in last_operations:
-        print(funcs.format_operation(operation))  # вывод форматированных данных об операции
-        print()  # пропуск строки
+    filtered_data = funcs.filter_operations(data)
+    if isinstance(filtered_data, str):
+        print(data)
+        exit()
+
+    sorted_data = funcs.sort_operations(filtered_data, COUNT_OPERATIONS)
+    if isinstance(sorted_data, str):
+        print(sorted_data)
+        exit()
+
+    for operation in sorted_data:
+        print(funcs.format_operation(operation))
+        print()
 
 
 if __name__ == '__main__':
