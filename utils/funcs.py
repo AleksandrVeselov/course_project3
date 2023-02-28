@@ -1,31 +1,63 @@
 import json
 from datetime import datetime
+import os
 
 
-def load_json(path: str) -> list[dict]:
+def load_json(path_to_file: str) -> list[dict] or str:
     """
-    Открывает json файл с данными об операциях, сортирует его по дате и возвращает
-    список с данными о пяти последних выполненных операциях
-    :param path: путь к файлу с данными об операциях
-    :return: список с данными о последних пяти выполненных операциях
+    Открывает json файл, расположенный по переданному пути
+    :param path_to_file: путь к файлу с данными об операциях
+    :return: список с загруженными и преобразованными данными об операциях
     """
-    with open(path, 'r', encoding='UTF-8') as json_file:
-        operations = json.load(json_file)  # список с данными из .json файла
-        filtered_operations = []  # отфильтрованные данные
+    if os.path.exists(path_to_file):
+        with open(path_to_file, 'r', encoding='UTF-8') as json_file:
+            operations = json.load(json_file)  # список с данными из .json файла
+            return operations
 
-        for operation in operations:
-            if operation.get('state') == 'EXECUTED':  # отбор выполненных(EXECUTED) операций
-                if operation.get('date'):  # отбор операций у которых есть ключ date
-                    operation['date'] = convert_date(operation['date'])  # конвертация даты в формат datetime
-                    filtered_operations.append(operation)  # добавление операции в список
-            filtered_operations.sort(key=lambda x: x['date'], reverse=True)  # сортировка операций в списке по дате
-    return filtered_operations[:5]  # возвращение пяти последних операций
+    else:
+        return f'Ошибка при обращении к файлу {path_to_file}. Проверьте правильность введенного имени'
 
 
-def convert_date(date):
-    input_pattern = '%Y-%m-%dT%H:%M:%S'  # шаблон для входной даты
-    date = date.split('.')
-    return datetime.strptime(date[0], input_pattern)
+def filter_operations(operations: list[dict]) -> list[dict] or str:
+    """
+    Отфильтровывает выполненные операции
+    :param operations: список с операциями
+    :return: список с выполненными (где есть ключ 'state' и его значение равно 'EXECUTED') операциями
+    """
+    filtered_operations = []  # отфильтрованные данные
+
+    for operation in operations:
+        if operation.get('state') == 'EXECUTED':  # отбор выполненных (EXECUTED) операций
+            filtered_operations.append(operation)  # добавление операции в список
+    if filtered_operations:
+        return filtered_operations
+
+    # Если в списке нет ни одного элемента
+    else:
+        return 'Внимание! В списке отсутствуют операции, отвечающие заданным критериям. ' \
+               'Проверьте корректность переданного списка операций'
+
+
+def sort_operations(operations: list[dict], end, start=0) -> list[dict] or str:
+    """
+    Сортирует список по дате и возвращает нужное количество операций
+    :param operations: список с операциями
+    :param start: номер первой операции
+    :param end: номер последней операции
+    :return: список с нужным количеством операций, отсортированных по дате
+    """
+    for operation in operations:
+        if operation.get('date'):  # отбор операций у которых есть ключ date
+            operation['date'] = convert_date(operation['date'])  # конвертация даты в формат datetime
+        else:
+            operation['date'] = datetime(1970, 1, 1)
+    operations.sort(key=lambda x: x['date'], reverse=True)  # сортировка операций в списке по дате
+    return operations[start:end]  # возвращение пяти последних операций
+
+
+def convert_date(date: str) -> datetime:
+    input_pattern = '%Y-%m-%dT%H:%M:%S.%f'  # шаблон для входной даты
+    return datetime.strptime(date, input_pattern)
 
 
 def format_requisites(requisites: str) -> str:
@@ -86,7 +118,7 @@ def format_operation(operation: dict) -> str:
                         f"{operation['operationAmount']['amount']} {operation['operationAmount']['currency']['name']}"
 
     else:
-        output_format = 'Некорректные данные об операции'
+        output_format = 'Отсутствуют реквизиты'
 
     return output_format
 
