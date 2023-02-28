@@ -4,6 +4,8 @@ from datetime import datetime
 
 @pytest.fixture()
 def test_list_1():
+    """Для теста функции sort_operations()"""
+
     return [
         {
             "id": 441945886,
@@ -97,6 +99,8 @@ def test_list_1():
 
 @pytest.fixture()
 def test_list_2():
+    """Для теста функций filter_operations() sort_operations()"""
+
     return [{
         "id": 464419177,
         "state": "CANCELED",
@@ -130,6 +134,8 @@ def test_list_2():
 
 @pytest.fixture()
 def test_list_3():
+    """Для теста функции format_operations()"""
+
     return [{
         "id": 441945886,
         "state": "EXECUTED",

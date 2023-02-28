@@ -1,5 +1,4 @@
 from utils import funcs
-from tests import test_data
 
 
 def main():
@@ -28,5 +27,4 @@ def main():
 
 
 if __name__ == '__main__':
-     main()
-
+    main()

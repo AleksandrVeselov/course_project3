@@ -35,14 +35,6 @@ def test_sort_operations(test_list_1):
     assert sorted_data[-1]['date'] == datetime(1970, 1, 1)
 
 
-def test_format_requisites():
-    pass
-
-
-def test_format_datetime():
-    pass
-
-
 def test_format_operations(test_list_3):
     formatted_data = funcs.format_operation(test_list_3[0])
     assert formatted_data == '26.08.2019 Перевод организации\n' \
