@@ -118,7 +118,7 @@ def format_operation(operation: dict) -> str:
                         f"{operation['operationAmount']['amount']} {operation['operationAmount']['currency']['name']}"
 
     else:
-        output_format = 'Некорректные данные об операции'
+        output_format = 'Отсутствуют реквизиты'
 
     return output_format
 

@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 
 import pytest
-from tests.test_data import test_list_1, test_list_2
+from tests.test_data import test_list_1, test_list_2, test_list_3
 from utils import funcs
 
 
@@ -43,5 +43,29 @@ def test_format_datetime():
     pass
 
 
-def test_format_operations():
-    pass
+def test_format_operations(test_list_3):
+    formatted_data = funcs.format_operation(test_list_3[0])
+    assert formatted_data == '26.08.2019 Перевод организации\n' \
+                             'Maestro 1596 83** **** 5199 -> Счет **9589\n' \
+                             '31957.58 руб.'
+
+    formatted_data = funcs.format_operation(test_list_3[1])
+    assert formatted_data == '23.03.2019 Открытие вклада\n' \
+                             'Счет **2431\n' \
+                             '48223.05 руб.'
+
+    formatted_data = funcs.format_operation(test_list_3[2])
+    assert formatted_data == 'Отсутствуют реквизиты'
+
+    formatted_data = funcs.format_operation(test_list_3[3])
+    assert formatted_data == '23.03.2019 Открытие вклада\n' \
+                             'Некорректный номер карты/счета\n' \
+                             '48223.05 руб.'
+
+    formatted_data = funcs.format_operation(test_list_3[4])
+    assert formatted_data == '23.03.2019 Открытие вклада\n' \
+                             'Некорректный номер карты/счета\n' \
+                             '48223.05 руб.'
+
+
+

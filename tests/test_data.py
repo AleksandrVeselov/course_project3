@@ -1,4 +1,5 @@
 import pytest
+from datetime import datetime
 
 
 @pytest.fixture()
@@ -125,3 +126,73 @@ def test_list_2():
             "from": "MasterCard 1796816785869527",
             "to": "Visa Classic 7699855375169288"
         }]
+
+
+@pytest.fixture()
+def test_list_3():
+    return [{
+        "id": 441945886,
+        "state": "EXECUTED",
+        "date": datetime.strptime("2019-08-26T10:50:58.294041", '%Y-%m-%dT%H:%M:%S.%f'),
+        "operationAmount": {
+            "amount": "31957.58",
+            "currency": {
+                "name": "руб.",
+                "code": "RUB"
+            }
+        },
+        "description": "Перевод организации",
+        "from": "Maestro 1596837868705199",
+        "to": "Счет 64686473678894779589"}, {
+            "id": 587085106,
+            "state": "EXECUTED",
+            "date": datetime.strptime("2019-03-23T10:45:06.972075", '%Y-%m-%dT%H:%M:%S.%f'),
+            "operationAmount": {
+                "amount": "48223.05",
+                "currency": {
+                    "name": "руб.",
+                    "code": "RUB"
+                }
+            },
+            "description": "Открытие вклада",
+            "to": "Счет 41421565395219882431"
+        }, {
+            "id": 587085106,
+            "state": "EXECUTED",
+            "date": datetime.strptime("2019-03-23T10:45:06.972075", '%Y-%m-%dT%H:%M:%S.%f'),
+            "operationAmount": {
+                "amount": "48223.05",
+                "currency": {
+                    "name": "руб.",
+                    "code": "RUB"
+                }
+            },
+            "description": "Открытие вклада",
+        }, {
+            "id": 587085106,
+            "state": "EXECUTED",
+            "date": datetime.strptime("2019-03-23T10:45:06.972075", '%Y-%m-%dT%H:%M:%S.%f'),
+            "operationAmount": {
+                "amount": "48223.05",
+                "currency": {
+                    "name": "руб.",
+                    "code": "RUB"
+                }
+            },
+            "description": "Открытие вклада",
+            "to": "Счет 41421565395219H82431"
+        },  {
+            "id": 587085106,
+            "state": "EXECUTED",
+            "date": datetime.strptime("2019-03-23T10:45:06.972075", '%Y-%m-%dT%H:%M:%S.%f'),
+            "operationAmount": {
+                "amount": "48223.05",
+                "currency": {
+                    "name": "руб.",
+                    "code": "RUB"
+                }
+            },
+            "description": "Открытие вклада",
+            "to": "Счет 4142156539521928243199"
+        }]
+
